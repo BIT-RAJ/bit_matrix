@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hemant Singh | AI/ML Enthusiast & Developer</title>
+  <meta name="description"
+    content="Portfolio of Hemant Singh — AI/ML, Data Science, Cybersecurity specialist from Mumbai." />
+  <meta name="theme-color" content="#07080f" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script type="module" crossorigin src="/assets/index-DqblSX7L.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-gI6SGfjC.css">
+</head>
+
+<body>
+  <!-- Floating Tech Background -->
+  <canvas id="techCanvas"></canvas>
+  <!-- Noise Overlay -->
+  <div class="noise"></div>
+  <!-- Gradient Blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- ═══ NAV ═══ -->
+  <nav id="navbar" class="nav">
+    <div class="nav-bar">
+      <a href="#hero" class="nav-logo">H.</a>
+      <div class="nav-center" id="navLinks">
+        <a href="#about" class="nl">About</a>
+        <a href="#skills" class="nl">Skills</a>
+        <a href="#work" class="nl">Work</a>
+        <a href="#experience" class="nl">Experience</a>
+        <a href="#contact" class="nl">Contact</a>
+      </div>
+      <a href="#contact" class="nav-cta">Let's Talk <i data-lucide="arrow-right" class="cta-arrow"></i></a>
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section id="hero" class="hero">
+    <div class="hero-wrap">
+      <div class="hero-top anim-in" style="--d:0">
+        <span class="hero-tag"><span class="pulse"></span> Available for Opportunities</span>
+      </div>
+      <h1 class="hero-h anim-in" style="--d:1">
+        <span class="h-line">Building the future</span>
+        <span class="h-line">with <em class="h-em">intelligent</em> code</span>
+      </h1>
+      <div class="hero-sub anim-in" style="--d:2">
+        <div class="type-wrap">
+          <span class="type-label">~/hemant $</span>
+          <span id="typeTarget" class="type-output"></span>
+          <span class="type-cursor">_</span>
+        </div>
+      </div>
+      <p class="hero-p anim-in" style="--d:3">
+        Tech enthusiast from <strong>Mumbai</strong> crafting solutions in
+        AI/ML, Data Science, and Cybersecurity.
+      </p>
+      <div class="hero-row anim-in" style="--d:4">
+        <a href="/resume.pdf" download class="btn-fill btn-download">
+          <i data-lucide="download" class="b-i"></i> Resume
+        </a>
+        <a href="#work" class="btn-line">
+          <i data-lucide="layers" class="b-i"></i> View Work
+        </a>
+        <a href="https://github.com/bithemant" target="_blank" class="btn-line">
+          <i data-lucide="github" class="b-i"></i> GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/hemant-singh-61a465247" target="_blank" class="btn-line">
+          <i data-lucide="linkedin" class="b-i"></i> LinkedIn
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual anim-in" style="--d:5">
+      <div class="hv-orbit">
+        <div class="hv-ring r1"></div>
+        <div class="hv-ring r2"></div>
+        <div class="hv-core"><i data-lucide="sparkles"></i></div>
+        <div class="hv-sat s1"><i data-lucide="brain"></i></div>
+        <div class="hv-sat s2"><i data-lucide="shield"></i></div>
+        <div class="hv-sat s3"><i data-lucide="code"></i></div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-track">
+        <div class="scroll-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ABOUT ═══ -->
+  <section id="about" class="sec">
+    <div class="contain">
+      <div class="about-grid">
+        <div class="about-left reveal">
+          <div class="bio-card">
+            <div class="bio-bar">
+              <span class="bio-dot" style="background:#ff5f57"></span>
+              <span class="bio-dot" style="background:#febc2e"></span>
+              <span class="bio-dot" style="background:#28c840"></span>
+              <span class="bio-bar-title">~/hemant/about.md</span>
+            </div>
+            <div class="bio-body">
+              <h2 class="about-heading"><span class="heading-accent">//</span> Who am I?</h2>
+              <p class="about-text">I'm <span class="hl">Hemant Singh</span>, a B.Tech Information Technology student
+                and passionate <span class="hl">Software Developer</span> with a keen interest in <span
+                  class="hl">DevOps</span>, <span class="hl">DevSecOps</span>, <span class="hl">AI/ML</span>, <span
+                  class="hl">IoT</span>, and <span class="hl">Cybersecurity</span>.</p>
+              <p class="about-text">I love building end-to-end solutions — from writing clean Python code and designing
+                CI/CD pipelines with Docker &amp; Kubernetes, to creating IoT prototypes with Arduino and Raspberry Pi.
+              </p>
+              <p class="about-text">I build intelligent applications that leverage machine learning for real-world
+                problem solving — from fraud detection systems to computer vision and gesture recognition.</p>
+              <div class="bio-chips">
+                <span class="bio-chip"><i data-lucide="brain" class="chip-i"></i> AI/ML</span>
+                <span class="bio-chip chip-v"><i data-lucide="shield" class="chip-i"></i> Security</span>
+                <span class="bio-chip chip-s"><i data-lucide="container" class="chip-i"></i> DevOps</span>
+                <span class="bio-chip"><i data-lucide="cpu" class="chip-i"></i> IoT</span>
+                <span class="bio-chip chip-v"><i data-lucide="database" class="chip-i"></i> Data</span>
+                <span class="bio-chip chip-s"><i data-lucide="git-branch" class="chip-i"></i> Open Source</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-stats">
+            <div class="about-stat glow-stat">
+              <span class="stat-val" data-count="10">0</span><span class="stat-plus">+</span>
+              <span class="stat-lbl">Projects</span>
+            </div>
+            <div class="about-stat glow-stat glow-v">
+              <span class="stat-val" data-count="3">0</span><span class="stat-plus">+</span>
+              <span class="stat-lbl">Certifications</span>
+            </div>
+            <div class="about-stat glow-stat glow-s">
+              <span class="stat-val" data-count="10">0</span><span class="stat-plus">+</span>
+              <span class="stat-lbl">Technologies</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-right reveal" style="--del:.12s">
+          <h3 class="skills-heading"><span class="heading-accent">&lt;</span> Core Skills <span
+              class="heading-accent">/&gt;</span></h3>
+          <div class="ring-grid">
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill" cx="60" cy="60" r="52" style="--val:90" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">90%</span><span class="ring-name">Python</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-v" cx="60" cy="60" r="52" style="--val:85" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">85%</span><span class="ring-name">Dev</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-s" cx="60" cy="60" r="52" style="--val:78" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">78%</span><span class="ring-name">DevOps</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill" cx="60" cy="60" r="52" style="--val:72" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">72%</span><span class="ring-name">AI/ML</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-v" cx="60" cy="60" r="52" style="--val:80" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">80%</span><span class="ring-name">Docker</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-s" cx="60" cy="60" r="52" style="--val:70" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">70%</span><span class="ring-name">K8s</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill" cx="60" cy="60" r="52" style="--val:78" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">78%</span><span class="ring-name">CI/CD</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-v" cx="60" cy="60" r="52" style="--val:85" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">85%</span><span class="ring-name">MySQL</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-s" cx="60" cy="60" r="52" style="--val:75" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">75%</span><span class="ring-name">IoT</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill" cx="60" cy="60" r="52" style="--val:70" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">70%</span><span class="ring-name">CyberSec</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-v" cx="60" cy="60" r="52" style="--val:85" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">85%</span><span class="ring-name">Git</span></div>
+            </div>
+            <div class="ring-item"><svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="52" />
+                <circle class="ring-fill rf-s" cx="60" cy="60" r="52" style="--val:75" />
+              </svg>
+              <div class="ring-info"><span class="ring-pct">75%</span><span class="ring-name">Jenkins</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SKILLS ═══ -->
+  <section id="skills" class="sec sec-dark">
+    <div class="contain">
+      <div class="sec-top reveal">
+        <span class="tag-label">Skills</span>
+        <h2 class="sec-h">My tech <em>stack</em></h2>
+      </div>
+      <div class="sk-grid">
+        <div class="sk-col reveal">
+          <h4 class="sk-title"><i data-lucide="terminal" class="sk-i"></i> Languages</h4>
+          <div class="sk-pills">
+            <span class="sk-pill">Python</span>
+            <span class="sk-pill">JavaScript</span>
+            <span class="sk-pill">HTML / CSS</span>
+            <span class="sk-pill">SQL</span>
+          </div>
+        </div>
+        <div class="sk-col reveal" style="--del:.08s">
+          <h4 class="sk-title"><i data-lucide="box" class="sk-i"></i> Frameworks</h4>
+          <div class="sk-pills">
+            <span class="sk-pill">Flask</span>
+            <span class="sk-pill">OpenCV</span>
+            <span class="sk-pill">MediaPipe</span>
+            <span class="sk-pill">Plotly</span>
+            <span class="sk-pill">TensorFlow</span>
+            <span class="sk-pill">Pandas</span>
+            <span class="sk-pill">NumPy</span>
+          </div>
+        </div>
+        <div class="sk-col reveal" style="--del:.16s">
+          <h4 class="sk-title"><i data-lucide="server" class="sk-i"></i> Infra</h4>
+          <div class="sk-pills">
+            <span class="sk-pill">Docker</span>
+            <span class="sk-pill">Git</span>
+            <span class="sk-pill">Linux</span>
+            <span class="sk-pill">Cybersecurity</span>
+            <span class="sk-pill">Networking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PROJECTS ═══ -->
+  <section id="work" class="sec">
+    <div class="contain">
+      <div class="sec-top reveal">
+        <span class="tag-label">Work</span>
+        <h2 class="sec-h">Selected <em>projects</em></h2>
+      </div>
+      <div class="proj-stack">
+        <a href="https://github.com/bithemant/Honeypot-Virtualization-System" target="_blank" class="proj reveal">
+          <span class="proj-idx">01</span>
+          <div class="proj-body">
+            <h3 class="proj-name">Honeypot Virtualization System</h3>
+            <p class="proj-d">Web-based honeypot emulating virtual file system & shell, logging attacker
+              interactions in real-time.</p>
+            <div class="proj-chips">
+              <span>Python</span><span>Flask</span><span>Cybersecurity</span><span>WebSocket</span>
+            </div>
+          </div>
+          <div class="proj-go"><span>Visit</span><i data-lucide="arrow-up-right"></i></div>
+        </a>
+        <a href="https://github.com/bithemant/Web-OLAP" target="_blank" class="proj reveal" style="--del:.06s">
+          <span class="proj-idx">02</span>
+          <div class="proj-body">
+            <h3 class="proj-name">Business Growth Analyzer</h3>
+            <p class="proj-d">OLAP web app for drill-down, roll-up, slice & dice operations with interactive
+              Plotly visualizations.</p>
+            <div class="proj-chips"><span>Flask</span><span>Plotly</span><span>Analytics</span><span>OLAP</span></div>
+          </div>
+          <div class="proj-go"><span>Visit</span><i data-lucide="arrow-up-right"></i></div>
+        </a>
+        <a href="https://github.com/bithemant/Computer-Vision-RPS-Game" target="_blank" class="proj reveal"
+          style="--del:.12s">
+          <span class="proj-idx">03</span>
+          <div class="proj-body">
+            <h3 class="proj-name">Computer Vision RPS Game</h3>
+            <p class="proj-d">Real-time Rock-Paper-Scissors powered by hand gesture recognition using OpenCV &
+              MediaPipe.</p>
+            <div class="proj-chips"><span>Python</span><span>OpenCV</span><span>MediaPipe</span><span>AI</span></div>
+          </div>
+          <div class="proj-go"><span>Visit</span><i data-lucide="arrow-up-right"></i></div>
+        </a>
+        <a href="https://github.com/bithemant/Flask-Based-Load-Balancer" target="_blank" class="proj reveal"
+          style="--del:.18s">
+          <span class="proj-idx">04</span>
+          <div class="proj-body">
+            <h3 class="proj-name">Flask Load Balancer</h3>
+            <p class="proj-d">Distributes requests across multiple backend servers simulating real-world traffic
+              patterns.</p>
+            <div class="proj-chips"><span>Python</span><span>Flask</span><span>Networking</span><span>DevOps</span>
+            </div>
+          </div>
+          <div class="proj-go"><span>Visit</span><i data-lucide="arrow-up-right"></i></div>
+        </a>
+        <a href="https://github.com/bithemant/Python-Automation-Suite" target="_blank" class="proj reveal"
+          style="--del:.24s">
+          <span class="proj-idx">05</span>
+          <div class="proj-body">
+            <h3 class="proj-name">Python Automation Suite</h3>
+            <p class="proj-d">Structured collection of automation & utility scripts for real-world practical
+              tasks.</p>
+            <div class="proj-chips"><span>Python</span><span>Automation</span><span>Scripting</span></div>
+          </div>
+          <div class="proj-go"><span>Visit</span><i data-lucide="arrow-up-right"></i></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EXPERIENCE ═══ -->
+  <section id="experience" class="sec sec-dark">
+    <div class="contain">
+      <div class="sec-top reveal">
+        <span class="tag-label">Experience</span>
+        <h2 class="sec-h">Journey & <em>credentials</em></h2>
+      </div>
+
+      <div class="exp-list">
+
+        <!-- Education -->
+        <div class="exp-card reveal">
+          <div class="exp-side">
+            <div class="exp-icon-wrap"><i data-lucide="graduation-cap" class="exp-icon"></i></div>
+            <span class="exp-type">Education</span>
+          </div>
+          <div class="exp-main">
+            <div class="exp-head">
+              <div>
+                <h3 class="exp-title">B.Tech in Information Technology</h3>
+                <p class="exp-org">University — Mumbai, India</p>
+              </div>
+              <span class="exp-date">2023 — Present</span>
+            </div>
+            <p class="exp-desc">Pursuing B.Tech with specialization focus on AI/ML, Data Science, and Cybersecurity.
+              Building hands-on projects combining intelligent systems with practical security solutions.</p>
+          </div>
+        </div>
+
+        <!-- Internship: Cybersecurity at Tutelr -->
+        <div class="exp-card reveal" style="--del:.08s">
+          <div class="exp-side">
+            <div class="exp-icon-wrap exp-icon-intern"><i data-lucide="shield" class="exp-icon"></i></div>
+            <span class="exp-type">Internship</span>
+          </div>
+          <div class="exp-main">
+            <div class="exp-head">
+              <div>
+                <h3 class="exp-title">Cybersecurity Intern</h3>
+                <p class="exp-org">Tutelr Infosec Pvt. Ltd.</p>
+              </div>
+              <span class="exp-date">Aug 2023 — Feb 2024 · 7 mos</span>
+            </div>
+            <p class="exp-desc">Trained in Cloud Security, DFIR (Digital Forensics & Incident Response),
+              Penetration Testing, and Blue Teaming. Gained hands-on experience in identifying
+              and mitigating security threats across cloud and on-premise environments.</p>
+            <a href="/certificates/cybersecurity-certificate.jpg" target="_blank" class="cert-btn">
+              <i data-lucide="award" class="cert-i"></i>
+              <span>View Certificate</span>
+              <i data-lucide="download" class="cert-dl"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Internship: IoT at CADD Centre -->
+        <div class="exp-card reveal" style="--del:.16s">
+          <div class="exp-side">
+            <div class="exp-icon-wrap exp-icon-intern"><i data-lucide="cpu" class="exp-icon"></i></div>
+            <span class="exp-type">Internship</span>
+          </div>
+          <div class="exp-main">
+            <div class="exp-head">
+              <div>
+                <h3 class="exp-title">IoT Intern — Livewire</h3>
+                <p class="exp-org">CADD Centre Training Services Pvt Ltd.</p>
+              </div>
+              <span class="exp-date">Aug 2023 — Mar 2024 · 8 mos</span>
+            </div>
+            <p class="exp-desc">Gained practical exposure to IoT concepts and hardware–software interfacing.
+              Worked on building connected systems, sensor integration, and embedded
+              communication protocols.</p>
+            <a href="/certificates/iot-certificate.jpg" target="_blank" class="cert-btn">
+              <i data-lucide="award" class="cert-i"></i>
+              <span>View Certificate</span>
+              <i data-lucide="download" class="cert-dl"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Internship: Pentest at HackersForYou -->
+        <div class="exp-card reveal" style="--del:.24s">
+          <div class="exp-side">
+            <div class="exp-icon-wrap exp-icon-intern"><i data-lucide="bug" class="exp-icon"></i></div>
+            <span class="exp-type">Internship</span>
+          </div>
+          <div class="exp-main">
+            <div class="exp-head">
+              <div>
+                <h3 class="exp-title">Penetration Testing Intern</h3>
+                <p class="exp-org">HackersForYou</p>
+              </div>
+              <span class="exp-date">Sep 2023 — Oct 2023 · 2 mos</span>
+            </div>
+            <p class="exp-desc">Learned fundamentals of penetration testing and vulnerability assessment.
+              Practiced identifying common web application vulnerabilities in lab environments,
+              including OWASP Top 10 attack vectors and remediation techniques.</p>
+          </div>
+        </div>
+
+        <!-- Self-Directed: Honeypot -->
+        <div class="exp-card reveal" style="--del:.32s">
+          <div class="exp-side">
+            <div class="exp-icon-wrap exp-icon-project"><i data-lucide="rocket" class="exp-icon"></i></div>
+            <span class="exp-type">Project</span>
+          </div>
+          <div class="exp-main">
+            <div class="exp-head">
+              <div>
+                <h3 class="exp-title">Honeypot Research & Development</h3>
+                <p class="exp-org">Self-Directed</p>
+              </div>
+              <span class="exp-date">2025</span>
+            </div>
+            <p class="exp-desc">Designed and built a full honeypot virtualization system using Python/Flask — emulating
+              shell environments to study real attacker behaviors and threat patterns.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT ═══ -->
+  <section id="contact" class="sec">
+    <div class="contain">
+      <div class="contact-split reveal">
+        <div class="ct-left">
+          <span class="tag-label">Contact</span>
+          <h2 class="sec-h">Let's create<br />something <em>amazing</em></h2>
+          <p class="sec-p">Open to collaborations, internships, and exciting projects. Whether it's AI, security, or
+            anything new — let's connect.</p>
+          <div class="ct-links">
+            <a href="https://github.com/bithemant" target="_blank" class="ct-link">
+              <i data-lucide="github" class="ct-li"></i>
+              <div><span class="ct-ll">GitHub</span><span class="ct-lv">@bithemant</span></div>
+              <i data-lucide="arrow-up-right" class="ct-la"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/hemant-singh-61a465247" target="_blank" class="ct-link">
+              <i data-lucide="linkedin" class="ct-li"></i>
+              <div><span class="ct-ll">LinkedIn</span><span class="ct-lv">Hemant Singh</span></div>
+              <i data-lucide="arrow-up-right" class="ct-la"></i>
+            </a>
+            <div class="ct-link ct-static">
+              <i data-lucide="map-pin" class="ct-li"></i>
+              <div><span class="ct-ll">Location</span><span class="ct-lv">Mumbai, India</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="ct-right">
+          <form id="contactForm" class="ct-form">
+            <div class="fg">
+              <label for="name">Name</label>
+              <input type="text" id="name" placeholder="Your name" required />
+            </div>
+            <div class="fg">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="you@mail.com" required />
+            </div>
+            <div class="fg">
+              <label for="message">Message</label>
+              <textarea id="message" rows="4" placeholder="Tell me about your idea..." required></textarea>
+            </div>
+            <button type="submit" class="btn-fill btn-w100">
+              <i data-lucide="send" class="b-i"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="ft">
+    <div class="contain ft-row">
+      <span class="ft-c">© 2026 Hemant Singh</span>
+      <div class="ft-links">
+        <a href="https://github.com/bithemant" target="_blank"><i data-lucide="github"></i></a>
+        <a href="https://www.linkedin.com/in/hemant-singh-61a465247" target="_blank"><i data-lucide="linkedin"></i></a>
+      </div>
+      <span class="ft-c">Crafted with passion</span>
+    </div>
+  </footer>
+
+  <!-- Certificate Modal -->
+  <div id="certModal" class="modal-overlay" style="display:none">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose"><i data-lucide="x"></i></button>
+      <img id="certImage" class="cert-image" src="" alt="Certificate" />
+      <a id="certDownload" href="#" download class="btn-fill btn-w100 modal-dl">
+        <i data-lucide="download" class="b-i"></i> Download Certificate
+      </a>
+    </div>
+  </div>
+
+</body>
+
+</html>

@@ -40,29 +40,59 @@ const upload = multer({
 
 // --------------- Gemini Setup ---------------
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+// Ordered list of models to try — if the primary is overloaded/unavailable, fall through
+const MODEL_CASCADE = [
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-2.0-flash-lite',
+];
+
+function getModel(modelName) {
+  return genAI.getGenerativeModel({ model: modelName });
+}
 
 // --------------- Retry Helper ---------------
-async function callGeminiWithRetry(prompt, maxRetries = 3) {
+async function callGeminiWithRetry(prompt, maxRetries = 2) {
   let lastError;
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      const result = await Promise.race([
-        model.generateContent(prompt),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Request timed out after 60 seconds')), 60000)
-        ),
-      ]);
-      return result;
-    } catch (err) {
-      lastError = err;
-      console.warn(`Gemini attempt ${attempt}/${maxRetries} failed:`, err.message);
-      if (attempt < maxRetries) {
-        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 8000);
-        await new Promise(r => setTimeout(r, delay));
+
+  for (const modelName of MODEL_CASCADE) {
+    const model = getModel(modelName);
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const result = await Promise.race([
+          model.generateContent(prompt),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Request timed out after 60 seconds')), 60000)
+          ),
+        ]);
+        console.log(`✅ Success with model: ${modelName} (attempt ${attempt})`);
+        return result;
+      } catch (err) {
+        lastError = err;
+        const msg = err.message || '';
+        const shouldFallback = msg.includes('503') || msg.includes('overloaded') ||
+          msg.includes('Service Unavailable') || msg.includes('404') ||
+          msg.includes('Not Found') || msg.includes('not supported') ||
+          msg.includes('429') || msg.includes('Too Many Requests') ||
+          msg.includes('quota');
+        console.warn(`⚠️ ${modelName} attempt ${attempt}/${maxRetries} failed:`, msg.substring(0, 200));
+
+        // If model is unavailable (503/404), skip remaining retries and try next model
+        if (shouldFallback) {
+          console.warn(`🔄 Model ${modelName} is unavailable, falling back to next model...`);
+          break;
+        }
+
+        if (attempt < maxRetries) {
+          const delay = Math.min(1000 * Math.pow(2, attempt - 1), 8000);
+          await new Promise(r => setTimeout(r, delay));
+        }
       }
     }
   }
+
   throw lastError;
 }
 

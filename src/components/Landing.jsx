@@ -115,11 +115,6 @@ function Landing({ page, setPage, resumeText, setResumeText, jobRole, setJobRole
 
     return (
         <div className="landing-wrapper">
-            <div className="landing-bg">
-                <div className="bg-orb bg-orb-1"></div>
-                <div className="bg-orb bg-orb-2"></div>
-                <div className="bg-orb bg-orb-3"></div>
-            </div>
 
             <div className="landing-content">
                 {/* Hero */}

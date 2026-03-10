@@ -7,6 +7,8 @@ import AnalysisResults from './components/AnalysisResults.jsx'
 import InterviewSimulator from './components/InterviewSimulator.jsx'
 import CoverLetter from './components/CoverLetter.jsx'
 import ToolsHub from './components/ToolsHub.jsx'
+import AnimatedBackground from './components/AnimatedBackground.jsx'
+import PWAInstallPrompt from './components/PWAInstallPrompt.jsx'
 import { saveToHistory, getTheme, setTheme } from './utils/api.js'
 import './App.css'
 
@@ -55,6 +57,7 @@ function App() {
 
     return (
         <ErrorBoundary onReset={handleReset}>
+            <AnimatedBackground />
             <Navbar
                 page={page}
                 onReset={handleReset}
@@ -110,6 +113,7 @@ function App() {
                 </div>
             </main>
             <Toast />
+            <PWAInstallPrompt />
         </ErrorBoundary>
     )
 }
