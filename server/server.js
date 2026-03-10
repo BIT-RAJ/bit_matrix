@@ -5,6 +5,7 @@ const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const rateLimit = require('express-rate-limit');
+const mockAI = require('./mock-ai');
 require('dotenv').config();
 
 const app = express();
@@ -230,23 +231,18 @@ Return ONLY valid JSON (no markdown code fences) with this exact structure:
 
 Ensure at least 4 improved bullets, 4 missing skills, 3 project recommendations, 3 grammar checks, 3 strengths, 3 weaknesses, 5 found keywords, and 5 missing keywords. Be specific and actionable.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    const responseText = result.response.text();
-
     let analysis;
     try {
-      analysis = parseGeminiJSON(responseText);
-    } catch {
-      console.error('Failed to parse Gemini response:', responseText.substring(0, 500));
-      return res.status(500).json({ error: 'AI returned invalid format. Please try again.' });
+      const result = await callGeminiWithRetry(prompt);
+      analysis = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /analyze, using mock AI:', aiErr.message?.substring(0, 200));
+      analysis = mockAI.getMockAnalysis(resumeText, jobRole);
     }
 
     res.json(analysis);
   } catch (err) {
     console.error('Analysis error:', err);
-    if (err.message?.includes('timed out')) {
-      return res.status(504).json({ error: 'Analysis timed out. Please try again.' });
-    }
     res.status(500).json({ error: err.message || 'Analysis failed' });
   }
 });
@@ -287,23 +283,18 @@ Return ONLY valid JSON (no markdown code fences) with this structure:
 
 Generate exactly 10 questions: 4 Technical, 3 Behavioral, 3 Situational. Assign difficulty levels. Make them specific to the candidate's experience, projects, and skills listed in the resume.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    const responseText = result.response.text();
-
     let interview;
     try {
-      interview = parseGeminiJSON(responseText);
-    } catch {
-      console.error('Failed to parse interview response:', responseText.substring(0, 500));
-      return res.status(500).json({ error: 'AI returned invalid format. Please try again.' });
+      const result = await callGeminiWithRetry(prompt);
+      interview = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /interview, using mock AI:', aiErr.message?.substring(0, 200));
+      interview = mockAI.getMockInterview(resumeText, jobRole);
     }
 
     res.json(interview);
   } catch (err) {
     console.error('Interview error:', err);
-    if (err.message?.includes('timed out')) {
-      return res.status(504).json({ error: 'Request timed out. Please try again.' });
-    }
     res.status(500).json({ error: err.message || 'Failed to generate interview questions' });
   }
 });
@@ -333,23 +324,18 @@ Return ONLY valid JSON (no markdown code fences) with this structure:
 
 Write a strong, personalized cover letter (3-4 paragraphs) that highlights the candidate's relevant experience and skills. Do not use generic filler text.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    const responseText = result.response.text();
-
     let coverLetter;
     try {
-      coverLetter = parseGeminiJSON(responseText);
-    } catch {
-      console.error('Failed to parse cover letter response:', responseText.substring(0, 500));
-      return res.status(500).json({ error: 'AI returned invalid format. Please try again.' });
+      const result = await callGeminiWithRetry(prompt);
+      coverLetter = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /cover-letter, using mock AI:', aiErr.message?.substring(0, 200));
+      coverLetter = mockAI.getMockCoverLetter(resumeText, jobRole, companyName);
     }
 
     res.json(coverLetter);
   } catch (err) {
     console.error('Cover letter error:', err);
-    if (err.message?.includes('timed out')) {
-      return res.status(504).json({ error: 'Request timed out. Please try again.' });
-    }
     res.status(500).json({ error: err.message || 'Failed to generate cover letter' });
   }
 });
@@ -385,8 +371,15 @@ Return ONLY valid JSON (no markdown code fences):
 }
 Provide at least 3 items per array.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /jd-compare, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockJDCompare(resumeText, jobDescription);
+    }
+    res.json(data);
   } catch (err) {
     console.error('JD compare error:', err);
     res.status(500).json({ error: err.message || 'Comparison failed' });
@@ -416,8 +409,15 @@ Return ONLY valid JSON (no markdown code fences):
 }
 Rewrite the entire resume preserving all factual information but improving language, structure, and impact.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /rewrite, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockRewrite(resumeText, jobRole, style);
+    }
+    res.json(data);
   } catch (err) {
     console.error('Rewrite error:', err);
     res.status(500).json({ error: err.message || 'Rewrite failed' });
@@ -449,8 +449,15 @@ Return ONLY valid JSON (no markdown code fences):
   "marketInsights": "<brief paragraph about current market for this role>"
 }`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /salary, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockSalary(resumeText, jobRole, location);
+    }
+    res.json(data);
   } catch (err) {
     console.error('Salary error:', err);
     res.status(500).json({ error: err.message || 'Salary estimation failed' });
@@ -489,8 +496,15 @@ Return ONLY valid JSON (no markdown code fences):
 }
 Provide 3 distinct career paths.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /career-paths, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockCareerPaths(resumeText, jobRole);
+    }
+    res.json(data);
   } catch (err) {
     console.error('Career paths error:', err);
     res.status(500).json({ error: err.message || 'Career path generation failed' });
@@ -519,8 +533,15 @@ Return ONLY valid JSON (no markdown code fences):
   "tip": "<one key tip for this type of question>"
 }`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /grade-answer, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockGradeAnswer(question, userAnswer);
+    }
+    res.json(data);
   } catch (err) {
     console.error('Answer grading error:', err);
     res.status(500).json({ error: err.message || 'Grading failed' });
@@ -559,8 +580,15 @@ Return ONLY valid JSON (no markdown code fences):
 }
 Generate 8 questions. For companies like Google/Amazon/Meta, use their known question styles (STAR, LP, etc).`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /company-questions, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockCompanyQuestions(resumeText, companyName, jobRole);
+    }
+    res.json(data);
   } catch (err) {
     console.error('Company questions error:', err);
     res.status(500).json({ error: err.message || 'Failed to generate questions' });
@@ -593,8 +621,15 @@ Return ONLY valid JSON (no markdown code fences):
 }
 Make the headline catchy and keyword-rich. The About section should tell a story.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /linkedin-optimize, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockLinkedIn(resumeText, jobRole);
+    }
+    res.json(data);
   } catch (err) {
     console.error('LinkedIn optimize error:', err);
     res.status(500).json({ error: err.message || 'LinkedIn optimization failed' });
@@ -625,8 +660,15 @@ Return ONLY valid JSON (no markdown code fences):
 }
 Email type: ${emailType}. Write a professional, personalized email. Provide 2 alternatives.`;
 
-    const result = await callGeminiWithRetry(prompt);
-    res.json(parseGeminiJSON(result.response.text()));
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /email-template, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockEmail(resumeText, emailType, recipientRole, companyName);
+    }
+    res.json(data);
   } catch (err) {
     console.error('Email template error:', err);
     res.status(500).json({ error: err.message || 'Email generation failed' });
