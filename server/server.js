@@ -675,12 +675,151 @@ Email type: ${emailType}. Write a professional, personalized email. Provide 2 al
   }
 });
 
+// ═══════════════════════════════════════════════════════════
+//  Real-Time Voice Interview
+// ═══════════════════════════════════════════════════════════
+
+// Start a voice interview session
+app.post('/api/voice-interview/start', aiLimiter, async (req, res) => {
+  try {
+    const { resumeText, jobRole } = req.body;
+    if (!resumeText) return res.status(400).json({ error: 'Resume text is required' });
+
+    const role = jobRole || 'Software Developer';
+
+    const prompt = `You are a senior recruiter / hiring manager conducting a LIVE technical + behavioral interview. The candidate has applied for the role of "${role}".
+
+CANDIDATE'S RESUME:
+"""
+${resumeText}
+"""
+
+Your task:
+1. Extract the candidate's first name from the resume (look at the first line).
+2. Identify 4-6 SPECIFIC things from their resume to ask about (projects, companies, skills, education).
+3. Generate a warm, natural opening introduction and your FIRST interview question.
+
+The first question MUST reference something SPECIFIC from their resume. For example:
+- "I noticed you worked on [specific project]. Can you walk me through the architecture?"
+- "Your experience with [specific skill] at [company] caught my eye. Tell me about a challenge you faced there."
+
+Return ONLY valid JSON (no markdown code fences):
+{
+  "candidateName": "<candidate's first name>",
+  "resumeHighlights": ["<specific item from resume to ask about>"],
+  "interviewerIntro": "<warm 2-3 sentence introduction, address candidate by first name, mention the role>",
+  "firstQuestion": "<specific question referencing something from their resume>",
+  "difficulty": "Medium"
+}
+
+Be conversational, warm, and professional — like a real interviewer, not robotic.`;
+
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /voice-interview/start, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockVoiceInterviewStart(resumeText, jobRole);
+    }
+    res.json(data);
+  } catch (err) {
+    console.error('Voice interview start error:', err);
+    res.status(500).json({ error: err.message || 'Failed to start interview' });
+  }
+});
+
+// Respond to user's answer in live interview
+app.post('/api/voice-interview/respond', aiLimiter, async (req, res) => {
+  try {
+    const { resumeText, jobRole, conversationHistory, userAnswer, currentDifficulty, questionNumber } = req.body;
+    if (!resumeText || !userAnswer) return res.status(400).json({ error: 'Resume text and answer are required' });
+
+    const role = jobRole || 'Software Developer';
+    const qNum = questionNumber || 1;
+    const totalQ = 8;
+    const isLast = qNum >= totalQ;
+
+    // Format conversation history
+    const historyText = (conversationHistory || [])
+      .map(c => `${c.role === 'interviewer' ? 'Interviewer' : 'Candidate'}: ${c.text}`)
+      .join('\n\n');
+
+    const prompt = `You are a senior recruiter conducting a LIVE interview for "${role}". You are on question ${qNum} of ${totalQ}.
+
+CANDIDATE'S RESUME:
+"""
+${resumeText.substring(0, 3000)}
+"""
+
+CONVERSATION SO FAR:
+"""
+${historyText}
+"""
+
+CANDIDATE'S LATEST ANSWER:
+"""
+${userAnswer}
+"""
+
+Current difficulty: ${currentDifficulty || 'Medium'}
+
+INSTRUCTIONS:
+1. First, give brief feedback/reaction to their answer (1-2 sentences, natural and conversational). Acknowledge what they said.
+2. ${isLast ? 'This is the FINAL question. Wrap up the interview warmly.' : 'Ask a follow-up question OR move to a new topic from their resume.'}
+3. Adjust difficulty: if they answered well, increase difficulty. If they struggled, lower it.
+4. ${isLast ? 'Provide a final score and detailed feedback.' : 'Make the next question SPECIFIC to their resume content.'}
+
+${isLast ? `Return ONLY valid JSON:
+{
+  "response": "<warm closing remarks and reaction to their last answer>",
+  "nextQuestion": "",
+  "difficulty": "${currentDifficulty}",
+  "questionNumber": ${qNum},
+  "isComplete": true,
+  "finalScore": <number 1-10>,
+  "finalFeedback": {
+    "summary": "<2-3 sentence overall assessment>",
+    "strengths": ["<strength shown during interview>"],
+    "improvements": ["<area to improve>"],
+    "tips": ["<actionable tip for next interview>"]
+  }
+}` : `Return ONLY valid JSON:
+{
+  "response": "<brief 1-2 sentence reaction to their answer>",
+  "nextQuestion": "<next interview question, specific to resume>",
+  "difficulty": "<Easy|Medium|Hard>",
+  "questionNumber": ${qNum + 1},
+  "isComplete": false
+}`}
+
+Be natural, conversational, and warm. Address the candidate by name occasionally. Reference specific resume items.`;
+
+    let data;
+    try {
+      const result = await callGeminiWithRetry(prompt);
+      data = parseGeminiJSON(result.response.text());
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini failed for /voice-interview/respond, using mock AI:', aiErr.message?.substring(0, 200));
+      data = mockAI.getMockVoiceInterviewRespond(resumeText, jobRole, userAnswer, currentDifficulty, qNum, totalQ);
+    }
+    res.json(data);
+  } catch (err) {
+    console.error('Voice interview respond error:', err);
+    res.status(500).json({ error: err.message || 'Failed to generate response' });
+  }
+});
+
 // --------------- Error handler ---------------
 app.use((err, _req, res, _next) => {
   console.error(err);
   res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Resume Analyzer API running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`✅ Bit-HireMatrix API running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

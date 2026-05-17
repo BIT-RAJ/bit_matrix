@@ -74,6 +74,19 @@ export async function generateEmail(resumeText, emailType, recipientRole = '', c
     return res.json();
 }
 
+// ---- Voice Interview ----
+export async function startVoiceInterview(resumeText, jobRole = '') {
+    const res = await fetch(`${API_BASE}/voice-interview/start`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
+    if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Failed to start interview' })); throw new Error(err.error); }
+    return res.json();
+}
+
+export async function sendVoiceResponse(resumeText, jobRole, conversationHistory, userAnswer, currentDifficulty, questionNumber) {
+    const res = await fetch(`${API_BASE}/voice-interview/respond`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, conversationHistory, userAnswer, currentDifficulty, questionNumber }) });
+    if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Failed to get interview response' })); throw new Error(err.error); }
+    return res.json();
+}
+
 // ---- Local storage helpers ----
 const HISTORY_KEY = 'resumeai_history';
 const MAX_HISTORY = 20;

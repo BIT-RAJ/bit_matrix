@@ -1,6 +1,6 @@
 {
-  "name": "ResumeAI Pro — AI Resume Analyzer",
-  "short_name": "ResumeAI Pro",
+  "name": "Bit-HireMatrix — AI Resume Analyzer",
+  "short_name": "Bit-HireMatrix",
   "description": "AI-powered resume analyzer with improvement suggestions, skill gap detection, and personalized interview preparation.",
   "start_url": "/",
   "display": "standalone",

@@ -7,13 +7,14 @@ import AnalysisResults from './components/AnalysisResults.jsx'
 import InterviewSimulator from './components/InterviewSimulator.jsx'
 import CoverLetter from './components/CoverLetter.jsx'
 import ToolsHub from './components/ToolsHub.jsx'
+import VoiceInterview from './components/VoiceInterview.jsx'
 import AnimatedBackground from './components/AnimatedBackground.jsx'
 import PWAInstallPrompt from './components/PWAInstallPrompt.jsx'
 import { saveToHistory, getTheme, setTheme } from './utils/api.js'
 import './App.css'
 
 function App() {
-    // Pages: upload | analyzing | results | interview | coverletter | tools
+    // Pages: upload | analyzing | results | interview | coverletter | tools | voiceinterview
     const [page, setPage] = useState('upload')
     const [resumeText, setResumeText] = useState('')
     const [jobRole, setJobRole] = useState('')
@@ -45,6 +46,7 @@ function App() {
     const handleStartInterview = () => setPage('interview')
     const handleStartCoverLetter = () => setPage('coverletter')
     const handleStartTools = () => setPage('tools')
+    const handleStartVoiceInterview = () => setPage('voiceinterview')
     const handleBackToResults = () => setPage('results')
 
     const handleReset = () => {
@@ -87,6 +89,7 @@ function App() {
                             onStartInterview={handleStartInterview}
                             onStartCoverLetter={handleStartCoverLetter}
                             onStartTools={handleStartTools}
+                            onStartVoiceInterview={handleStartVoiceInterview}
                         />
                     )}
                     {page === 'interview' && (
@@ -105,6 +108,14 @@ function App() {
                     )}
                     {page === 'tools' && (
                         <ToolsHub
+                            resumeText={resumeText}
+                            jobRole={jobRole}
+                            onBack={handleBackToResults}
+                            onStartVoiceInterview={handleStartVoiceInterview}
+                        />
+                    )}
+                    {page === 'voiceinterview' && (
+                        <VoiceInterview
                             resumeText={resumeText}
                             jobRole={jobRole}
                             onBack={handleBackToResults}

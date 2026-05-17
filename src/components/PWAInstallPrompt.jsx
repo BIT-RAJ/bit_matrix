@@ -17,14 +17,14 @@ function PWAInstallPrompt() {
     const [show, setShow] = useState(false)
     const [installing, setInstalling] = useState(false)
     const [installed, setInstalled] = useState(false)
+    const [manualMode, setManualMode] = useState(false)
 
     useEffect(() => {
-        // Check if already dismissed or installed
-        const dismissed = localStorage.getItem('pwa_install_dismissed')
+        // Check if already installed as standalone
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches
             || window.navigator.standalone === true
 
-        if (isStandalone || dismissed === 'true') return
+        if (isStandalone) return
 
         // If prompt was already captured before component mounted
         if (deferredPrompt) {
@@ -33,9 +33,7 @@ function PWAInstallPrompt() {
         }
 
         const handleInstallable = () => {
-            if (!localStorage.getItem('pwa_install_dismissed')) {
-                setShow(true)
-            }
+            setShow(true)
         }
 
         window.addEventListener('pwa-installable', handleInstallable)
@@ -47,13 +45,39 @@ function PWAInstallPrompt() {
             deferredPrompt = null
         })
 
+        // Fallback: show prompt after 3 seconds even if beforeinstallprompt
+        // didn't fire (e.g. on localhost, HTTP, or unsupported browsers)
+        const fallbackTimer = setTimeout(() => {
+            if (!deferredPrompt && !show) {
+                const dismissed = sessionStorage.getItem('pwa_install_dismissed_session')
+                if (!dismissed) {
+                    setManualMode(true)
+                    setShow(true)
+                }
+            }
+        }, 3000)
+
         return () => {
             window.removeEventListener('pwa-installable', handleInstallable)
+            clearTimeout(fallbackTimer)
         }
     }, [])
 
     const handleInstall = async () => {
-        if (!deferredPrompt) return
+        if (manualMode || !deferredPrompt) {
+            // Show manual install instructions for browsers that don't support beforeinstallprompt
+            const isChrome = /chrome|chromium/i.test(navigator.userAgent) && !/edg/i.test(navigator.userAgent)
+            const isEdge = /edg/i.test(navigator.userAgent)
+            const isFirefox = /firefox/i.test(navigator.userAgent)
+            let instructions = ''
+            if (isChrome) instructions = 'Click the install icon (⊕) in the address bar, or go to ⋮ Menu → "Install app"'
+            else if (isEdge) instructions = 'Click ⋯ Menu → Apps → "Install this site as an app"'
+            else if (isFirefox) instructions = 'Firefox: Open in Chrome or Edge to install as an app.'
+            else instructions = 'Open this site in Chrome or Edge, then use the browser menu to install.'
+            alert(`📲 Install Bit-HireMatrix\n\n${instructions}`)
+            handleDismiss()
+            return
+        }
         setInstalling(true)
         try {
             deferredPrompt.prompt()
@@ -73,7 +97,7 @@ function PWAInstallPrompt() {
 
     const handleDismiss = () => {
         setShow(false)
-        localStorage.setItem('pwa_install_dismissed', 'true')
+        sessionStorage.setItem('pwa_install_dismissed_session', 'true')
     }
 
     if (!show) return null
@@ -85,7 +109,7 @@ function PWAInstallPrompt() {
                     <div className="pwa-installed">
                         <div className="pwa-installed-icon">✅</div>
                         <h3>App Installed!</h3>
-                        <p>ResumeAI Pro has been added to your device.</p>
+                        <p>Bit-HireMatrix has been added to your device.</p>
                     </div>
                 ) : (
                     <>
@@ -95,7 +119,7 @@ function PWAInstallPrompt() {
                                 <span>&#9883;</span>
                             </div>
                         </div>
-                        <h3 className="pwa-title">Install ResumeAI Pro</h3>
+                        <h3 className="pwa-title">Install Bit-HireMatrix</h3>
                         <p className="pwa-desc">
                             Add this app to your home screen for quick access, offline support, and a native app experience.
                         </p>

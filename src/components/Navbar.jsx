@@ -6,15 +6,15 @@ function Navbar({ page, onReset, onBackToResults, theme, toggleTheme }) {
             <div className="navbar-inner">
                 <button className="navbar-brand" onClick={onReset} id="nav-logo">
                     <span className="brand-icon">&#9883;</span>
-                    <span className="brand-text">ResumeAI</span>
-                    <span className="brand-pro">Pro</span>
+                    <span className="brand-text">Bit-</span>
+                    <span className="brand-pro">HireMatrix</span>
                 </button>
 
                 <div className="navbar-actions">
                     <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`} id="theme-toggle">
                         {theme === 'dark' ? '☀️' : '🌙'}
                     </button>
-                    {(page === 'interview' || page === 'coverletter' || page === 'tools') && (
+                    {(page === 'interview' || page === 'coverletter' || page === 'tools' || page === 'voiceinterview') && (
                         <button className="btn-secondary" onClick={onBackToResults} id="nav-back-results">
                             ← Results
                         </button>

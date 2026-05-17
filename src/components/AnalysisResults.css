@@ -856,3 +856,20 @@
         font-size: 0.72rem;
     }
 }
+
+/* ====== Voice Interview CTA (USP) ====== */
+.vi-cta-btn {
+    position: relative;
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899) !important;
+    box-shadow: 0 4px 24px rgba(139, 92, 246, 0.45) !important;
+    animation: vi-glow 2.5s ease-in-out infinite alternate;
+}
+
+.vi-cta-btn:hover {
+    box-shadow: 0 8px 36px rgba(139, 92, 246, 0.65) !important;
+}
+
+@keyframes vi-glow {
+    0% { box-shadow: 0 4px 24px rgba(139, 92, 246, 0.45); }
+    100% { box-shadow: 0 6px 32px rgba(236, 72, 153, 0.55); }
+}

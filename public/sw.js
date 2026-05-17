@@ -1,4 +1,4 @@
-const CACHE_NAME = 'resumeai-pro-v1';
+const CACHE_NAME = 'bit-hirematrix-v1';
 
 // Static assets to pre-cache on install
 const PRECACHE_ASSETS = [

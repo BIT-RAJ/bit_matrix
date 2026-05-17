@@ -12,7 +12,7 @@ const TOOLS = [
     { id: 'email', icon: '📧', label: 'Email Writer', desc: 'Generate professional emails' },
 ]
 
-function ToolsHub({ resumeText, jobRole, onBack }) {
+function ToolsHub({ resumeText, jobRole, onBack, onStartVoiceInterview }) {
     const [activeTool, setActiveTool] = useState(null)
     const [loading, setLoading] = useState(false)
     const [result, setResult] = useState(null)
@@ -78,6 +78,12 @@ function ToolsHub({ resumeText, jobRole, onBack }) {
                         <button className="btn-secondary" onClick={onBack}>← Back to Results</button>
                     </div>
                     <div className="tools-grid animate-in stagger-1">
+                        <button className="tool-card glass tool-card-usp" onClick={onStartVoiceInterview}>
+                            <span className="tool-card-icon">🎙️</span>
+                            <h3 className="tool-card-label">Live AI Interview</h3>
+                            <p className="tool-card-desc">Real-time voice mock interview with AI</p>
+                            <span className="tool-card-badge">USP</span>
+                        </button>
                         {TOOLS.map(t => (
                             <button key={t.id} className="tool-card glass" onClick={() => { setActiveTool(t.id); reset() }}>
                                 <span className="tool-card-icon">{t.icon}</span>

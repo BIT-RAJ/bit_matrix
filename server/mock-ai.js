@@ -391,6 +391,153 @@ function getMockEmail(resumeText, emailType, recipientRole, companyName) {
   };
 }
 
+function getMockVoiceInterviewStart(resumeText, jobRole) {
+  const name = extractName(resumeText);
+  const skills = extractSkillsFromText(resumeText);
+  const role = jobRole || 'Software Developer';
+  const displayName = name !== 'the candidate' ? name.split(' ')[0] : 'there';
+
+  // Extract project-like lines from resume
+  const lines = resumeText.split('\n').map(l => l.trim()).filter(l => l.length > 20 && l.length < 150);
+  const projectLines = lines.filter(l =>
+    /project|built|developed|created|designed|implemented|architected|led/i.test(l)
+  ).slice(0, 4);
+
+  const highlights = [
+    ...skills.slice(0, 3).map(s => `Experience with ${s}`),
+    ...projectLines.slice(0, 2),
+  ].slice(0, 5);
+
+  const firstSkill = skills[0] || 'software development';
+  const secondSkill = skills[1] || 'problem-solving';
+
+  return {
+    candidateName: displayName,
+    resumeHighlights: highlights.length > 0 ? highlights : ['Software development experience', 'Technical project work', 'Team collaboration'],
+    interviewerIntro: `Hi ${displayName}! Thank you for taking the time to interview with us today. I'm really excited to learn more about your background and experience. I've had a chance to review your resume, and I'm impressed by your work with ${firstSkill} and ${secondSkill}.`,
+    firstQuestion: projectLines.length > 0
+      ? `I noticed from your resume that you've worked on some interesting projects. Can you walk me through the most challenging technical project you've been involved in? I'd love to hear about the architecture decisions you made and any obstacles you had to overcome.`
+      : `I see you have experience with ${firstSkill}. Can you tell me about a specific project where you used ${firstSkill} to solve a real-world problem? Walk me through your approach and the impact it had.`,
+    difficulty: 'Medium',
+    _mockAI: true,
+  };
+}
+
+function getMockVoiceInterviewRespond(resumeText, jobRole, userAnswer, currentDifficulty, questionNumber, totalQuestions) {
+  const name = extractName(resumeText);
+  const skills = extractSkillsFromText(resumeText);
+  const role = jobRole || 'Software Developer';
+  const displayName = name !== 'the candidate' ? name.split(' ')[0] : '';
+  const isLast = questionNumber >= totalQuestions;
+
+  const answerWords = userAnswer.split(/\s+/).length;
+  const answerQuality = answerWords > 50 ? 'good' : answerWords > 20 ? 'okay' : 'short';
+
+  // Adjust difficulty
+  let newDifficulty = currentDifficulty || 'Medium';
+  if (answerQuality === 'good' && currentDifficulty !== 'Hard') newDifficulty = 'Hard';
+  else if (answerQuality === 'short' && currentDifficulty !== 'Easy') newDifficulty = 'Easy';
+
+  const reactions = {
+    good: [
+      `That's a really thorough answer${displayName ? ', ' + displayName : ''}! I can tell you have solid hands-on experience.`,
+      `Great explanation! I appreciate the level of detail you provided.`,
+      `Excellent${displayName ? ', ' + displayName : ''}. That shows strong technical understanding and practical experience.`,
+    ],
+    okay: [
+      `Thanks for sharing that${displayName ? ', ' + displayName : ''}. That gives me a good picture.`,
+      `Okay, I understand your approach. Let me ask you something else.`,
+      `That's helpful context${displayName ? ', ' + displayName : ''}. I'd like to explore another area now.`,
+    ],
+    short: [
+      `I see. Could you perhaps elaborate a bit more in future answers? Specific examples really help showcase your experience.`,
+      `Thanks${displayName ? ', ' + displayName : ''}. Don't hesitate to go into more detail — interviewers love specifics!`,
+      `Got it. Let's move on — and remember, the more specific you can be, the better.`,
+    ],
+  };
+
+  const followUpQuestions = {
+    Easy: [
+      `What technologies or tools do you enjoy working with the most, and why?`,
+      `Can you describe your typical workflow when starting a new project?`,
+      `Tell me about a time you collaborated with a team to deliver a project. What was your role?`,
+      `How do you stay up-to-date with new technologies in ${role.toLowerCase()} field?`,
+      `What motivates you in your work as a ${role.toLowerCase()}?`,
+      `Describe a project you're particularly proud of. What made it special?`,
+      `How do you handle feedback on your work?`,
+      `What drew you to ${role.toLowerCase()} as a career path?`,
+    ],
+    Medium: [
+      skills.length > 0 ? `How would you compare ${skills[0]} with alternatives you've used? What are the trade-offs?` : `What's your approach to evaluating and choosing between different technologies for a project?`,
+      `Describe a time when you had to debug a complex issue in production. Walk me through your process.`,
+      `How do you ensure code quality in your projects? What practices do you follow?`,
+      `Tell me about a time you had to learn something completely new under a tight deadline.`,
+      `If you were designing a system from scratch for your last project, what would you do differently?`,
+      `How do you handle disagreements about technical decisions within a team?`,
+      `What's the most complex feature you've implemented, and how did you break it down?`,
+      `Describe your experience with testing. What's your testing philosophy?`,
+    ],
+    Hard: [
+      `Let's say our system needs to handle 100x the current traffic overnight. Walk me through your scaling strategy.`,
+      `How would you design a distributed system that maintains consistency while handling network partitions?`,
+      `Describe a scenario where you had to make a significant architectural trade-off. What factors did you consider?`,
+      `If you were the tech lead on a new project, how would you set up the development workflow and make key architecture decisions?`,
+      `What's your approach to performance optimization? Can you give me a concrete example with measurable results?`,
+      `How would you handle a situation where a critical system component fails and there's no immediate backup?`,
+      `Explain the concept of eventual consistency and when you would choose it over strong consistency.`,
+      `If our team is struggling with technical debt, how would you prioritize and plan the refactoring effort?`,
+    ],
+  };
+
+  const reactionPool = reactions[answerQuality];
+  const reaction = reactionPool[Math.floor(Math.random() * reactionPool.length)];
+
+  if (isLast) {
+    const score = answerQuality === 'good' ? 7 + Math.floor(Math.random() * 2) : answerQuality === 'okay' ? 5 + Math.floor(Math.random() * 2) : 4 + Math.floor(Math.random() * 2);
+    return {
+      response: `${reaction}\n\nWell${displayName ? ', ' + displayName : ''}, that wraps up our interview! Thank you so much for your time today. You did a ${score >= 7 ? 'great' : score >= 5 ? 'solid' : 'decent'} job overall. We'll be in touch soon with next steps.`,
+      nextQuestion: '',
+      difficulty: newDifficulty,
+      questionNumber: questionNumber,
+      isComplete: true,
+      finalScore: score,
+      finalFeedback: {
+        summary: `${displayName || 'The candidate'} demonstrated ${score >= 7 ? 'strong' : score >= 5 ? 'adequate' : 'developing'} skills for a ${role} position. ${score >= 7 ? 'Communication was clear and answers showed depth.' : 'More specific examples and deeper technical explanations would strengthen future interviews.'}`,
+        strengths: [
+          answerQuality !== 'short' ? 'Provided detailed responses when discussing experience' : 'Showed willingness to engage with questions',
+          skills.length > 3 ? 'Demonstrated breadth of technical knowledge' : 'Showed foundational technical understanding',
+          'Completed the full interview showing commitment',
+        ],
+        improvements: [
+          answerQuality === 'short' ? 'Provide more detailed answers with specific examples' : 'Could quantify impact more (percentages, numbers, metrics)',
+          'Use the STAR method (Situation, Task, Action, Result) for behavioral questions',
+          'Prepare more specific examples from past experience before interviews',
+        ],
+        tips: [
+          'Practice explaining your projects out loud — it helps organize thoughts',
+          'Research the company beforehand and connect your experience to their needs',
+          'Prepare 3-4 strong stories from your past that can be adapted to different questions',
+          'Ask thoughtful questions back to the interviewer about the role and team',
+        ],
+      },
+      _mockAI: true,
+    };
+  }
+
+  const questionPool = followUpQuestions[newDifficulty] || followUpQuestions['Medium'];
+  const qIndex = (questionNumber - 1) % questionPool.length;
+  const nextQuestion = questionPool[qIndex];
+
+  return {
+    response: reaction,
+    nextQuestion: nextQuestion,
+    difficulty: newDifficulty,
+    questionNumber: questionNumber + 1,
+    isComplete: false,
+    _mockAI: true,
+  };
+}
+
 module.exports = {
   getMockAnalysis,
   getMockInterview,
@@ -403,4 +550,6 @@ module.exports = {
   getMockCompanyQuestions,
   getMockLinkedIn,
   getMockEmail,
+  getMockVoiceInterviewStart,
+  getMockVoiceInterviewRespond,
 };
