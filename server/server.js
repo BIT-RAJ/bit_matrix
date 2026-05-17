@@ -15,6 +15,16 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
+// Vercel can hand the function either the full /api path or the path without /api.
+// Normalize both cases so the same route definitions work locally and in production.
+app.use((req, _res, next) => {
+  if (!req.url.startsWith('/api/')) {
+    if (req.url === '/') req.url = '/api';
+    else req.url = `/api${req.url}`;
+  }
+  next();
+});
+
 // Rate limiting — 30 AI requests per minute per IP
 const aiLimiter = rateLimit({
   windowMs: 60 * 1000,
