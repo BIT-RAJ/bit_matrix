@@ -2,11 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
-const pdfParse = require('pdf-parse');
-const mammoth = require('mammoth');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const rateLimit = require('express-rate-limit');
-const mockAI = require('./mock-ai');
 require('dotenv').config();
 
 const app = express();
@@ -16,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Rate limiting
+// Rate limiter
 const aiLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 30,
@@ -32,67 +28,54 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 10 * 1024 * 1024
-  },
-  fileFilter: (_req, file, cb) => {
-    const allowed = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/plain',
-    ];
-
-    if (allowed.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Unsupported file type'));
-    }
-  },
+  }
 });
 
-// Gemini setup
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// Health check route
-app.get('/api/health', (_req, res) => {
+// Health route
+app.get('/api/health', function (_req, res) {
   res.json({
     status: 'ok',
     message: 'Backend running successfully',
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 });
 
 // Upload route
-app.post('/api/upload', upload.single('resume'), async (req, res) => {
+app.post('/api/upload', upload.single('resume'), async function (req, res) {
   try {
+
     if (!req.file) {
       return res.status(400).json({
-        error: 'No file uploaded',
+        error: 'No file uploaded'
       });
     }
 
     res.json({
       success: true,
       filename: req.file.originalname,
-      size: req.file.size,
+      size: req.file.size
     });
 
   } catch (err) {
+
     console.error(err);
 
     res.status(500).json({
-      error: err.message || 'Upload failed',
+      error: err.message || 'Upload failed'
     });
   }
 });
 
 // Analyze route
-app.post('/api/analyze', aiLimiter, async (req, res) => {
+app.post('/api/analyze', aiLimiter, async function (req, res) {
+
   try {
-    const { resumeText } = req.body;
+
+    const resumeText = req.body.resumeText;
 
     if (!resumeText) {
       return res.status(400).json({
-        error: 'Resume text is required',
+        error: 'Resume text is required'
       });
     }
 
@@ -101,35 +84,37 @@ app.post('/api/analyze', aiLimiter, async (req, res) => {
       atsScore: 80,
       strengths: [
         'Strong technical profile',
-        'Good project experience',
+        'Good projects',
         'Relevant skills'
       ],
       weaknesses: [
-        'Add more quantified achievements'
+        'Add more measurable achievements'
       ]
     });
 
   } catch (err) {
+
     console.error(err);
 
     res.status(500).json({
-      error: err.message || 'Analysis failed',
+      error: err.message || 'Analysis failed'
     });
   }
 });
 
 // Error handler
-app.use((err, _req, res, _next) => {
+app.use(function (err, _req, res, _next) {
+
   console.error(err);
 
   res.status(500).json({
-    error: err.message || 'Internal server error',
+    error: err.message || 'Internal server error'
   });
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Bit-HireMatrix API running on port ${PORT}`);
+app.listen(PORT, function () {
+  console.log("Bit-HireMatrix API running on port " + PORT);
 });
 
 module.exports = app;
