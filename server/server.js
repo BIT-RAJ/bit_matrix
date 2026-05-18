@@ -12,24 +12,17 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// --------------- Middleware ---------------
+// Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-
-// Normalize API routes
-app.use((req, _res, next) => {
-  if (!req.url.startsWith('/api/')) {
-    if (req.url === '/') req.url = '/api';
-    else req.url = `/api${req.url}`;
-  }
-  next();
-});
 
 // Rate limiting
 const aiLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 30,
-  message: { error: 'Too many requests. Please wait a moment and try again.' },
+  message: {
+    error: 'Too many requests. Please wait a moment and try again.'
+  },
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -37,7 +30,9 @@ const aiLimiter = rateLimit({
 // File upload setup
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: {
+    fileSize: 10 * 1024 * 1024
+  },
   fileFilter: (_req, file, cb) => {
     const allowed = [
       'application/pdf',
@@ -49,7 +44,7 @@ const upload = multer({
     if (allowed.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Unsupported file type. Please upload PDF, DOC, DOCX, or TXT.'));
+      cb(new Error('Unsupported file type'));
     }
   },
 });
@@ -57,11 +52,11 @@ const upload = multer({
 // Gemini setup
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Health check
+// Health check route
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
-    message: 'Backend is running successfully 🚀',
+    message: 'Backend running successfully 🚀',
     timestamp: new Date().toISOString(),
   });
 });
@@ -80,6 +75,7 @@ app.post('/api/upload', upload.single('resume'), async (req, res) => {
       filename: req.file.originalname,
       size: req.file.size,
     });
+
   } catch (err) {
     console.error(err);
 
@@ -89,7 +85,7 @@ app.post('/api/upload', upload.single('resume'), async (req, res) => {
   }
 });
 
-// Example analyze route
+// Analyze route
 app.post('/api/analyze', aiLimiter, async (req, res) => {
   try {
     const { resumeText } = req.body;
@@ -102,10 +98,17 @@ app.post('/api/analyze', aiLimiter, async (req, res) => {
 
     res.json({
       overallScore: 85,
-      strengths: ['Good technical skills', 'Strong projects'],
-      weaknesses: ['Add more measurable achievements'],
       atsScore: 80,
+      strengths: [
+        'Strong technical profile',
+        'Good project experience',
+        'Relevant skills'
+      ],
+      weaknesses: [
+        'Add more quantified achievements'
+      ]
     });
+
   } catch (err) {
     console.error(err);
 
@@ -129,5 +132,5 @@ app.listen(PORT, () => {
   console.log(`✅ Bit-HireMatrix API running on port ${PORT}`);
 });
 
-export default app;
+module.exports = app;
 ```
