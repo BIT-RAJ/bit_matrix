@@ -1,88 +1,88 @@
-const API_BASE = import.meta.env.VITE_API_BASE || '/api';
+const API_URL = "https://resume-analyzer-api-4gpv.onrender.com";
 
 export async function uploadResume(file) {
     const formData = new FormData();
     formData.append('resume', file);
-    const res = await fetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
+    const res = await fetch(`${API_URL}/api/upload`, { method: 'POST', body: formData });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Upload failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function analyzeResume(resumeText, jobRole = '') {
-    const res = await fetch(`${API_BASE}/analyze`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
+    const res = await fetch(`${API_URL}/api/analyze`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Analysis failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function generateInterviewQuestions(resumeText, jobRole = '') {
-    const res = await fetch(`${API_BASE}/interview`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
+    const res = await fetch(`${API_URL}/api/interview`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Failed to generate questions' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function generateCoverLetter(resumeText, jobRole = '', companyName = '') {
-    const res = await fetch(`${API_BASE}/cover-letter`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, companyName }) });
+    const res = await fetch(`${API_URL}/api/cover-letter`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, companyName }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Failed to generate cover letter' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function compareWithJD(resumeText, jobDescription) {
-    const res = await fetch(`${API_BASE}/jd-compare`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobDescription }) });
+    const res = await fetch(`${API_URL}/api/jd-compare`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobDescription }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Comparison failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function rewriteResume(resumeText, jobRole = '', style = '') {
-    const res = await fetch(`${API_BASE}/rewrite`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, style }) });
+    const res = await fetch(`${API_URL}/api/rewrite`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, style }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Rewrite failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function estimateSalary(resumeText, jobRole = '', location = '') {
-    const res = await fetch(`${API_BASE}/salary`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, location }) });
+    const res = await fetch(`${API_URL}/api/salary`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, location }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Salary estimation failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function getCareerPaths(resumeText, jobRole = '') {
-    const res = await fetch(`${API_BASE}/career-paths`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
+    const res = await fetch(`${API_URL}/api/career-paths`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Career path generation failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function gradeAnswer(question, userAnswer, resumeText = '') {
-    const res = await fetch(`${API_BASE}/grade-answer`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, userAnswer, resumeText }) });
+    const res = await fetch(`${API_URL}/api/grade-answer`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, userAnswer, resumeText }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Grading failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function getCompanyQuestions(resumeText, companyName, jobRole = '') {
-    const res = await fetch(`${API_BASE}/company-questions`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, companyName, jobRole }) });
+    const res = await fetch(`${API_URL}/api/company-questions`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, companyName, jobRole }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Failed to generate questions' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function optimizeLinkedIn(resumeText, jobRole = '') {
-    const res = await fetch(`${API_BASE}/linkedin-optimize`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
+    const res = await fetch(`${API_URL}/api/linkedin-optimize`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'LinkedIn optimization failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function generateEmail(resumeText, emailType, recipientRole = '', companyName = '') {
-    const res = await fetch(`${API_BASE}/email-template`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, emailType, recipientRole, companyName }) });
+    const res = await fetch(`${API_URL}/api/email-template`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, emailType, recipientRole, companyName }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Email generation failed' })); throw new Error(err.error); }
     return res.json();
 }
 
 // ---- Voice Interview ----
 export async function startVoiceInterview(resumeText, jobRole = '') {
-    const res = await fetch(`${API_BASE}/voice-interview/start`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
+    const res = await fetch(`${API_URL}/api/voice-interview/start`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Failed to start interview' })); throw new Error(err.error); }
     return res.json();
 }
 
 export async function sendVoiceResponse(resumeText, jobRole, conversationHistory, userAnswer, currentDifficulty, questionNumber) {
-    const res = await fetch(`${API_BASE}/voice-interview/respond`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, conversationHistory, userAnswer, currentDifficulty, questionNumber }) });
+    const res = await fetch(`${API_URL}/api/voice-interview/respond`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resumeText, jobRole, conversationHistory, userAnswer, currentDifficulty, questionNumber }) });
     if (!res.ok) { const err = await res.json().catch(() => ({ error: 'Failed to get interview response' })); throw new Error(err.error); }
     return res.json();
 }
