@@ -36,7 +36,8 @@ function Landing({ page, setPage, resumeText, setResumeText, jobRole, setJobRole
             setError('')
             setFileName(file.name)
             setPage('analyzing')
-            const { text } = await uploadResume(file)
+            // const { text } = await uploadResume(file)
+            const text = "This is a sample resume text"
             setResumeText(text)
             const analysis = await analyzeResume(text, jobRole)
             onAnalysisComplete(analysis)
