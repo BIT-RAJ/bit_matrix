@@ -56,7 +56,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
-    message: 'Backend running successfully 🚀',
+    message: 'Backend running successfully',
     timestamp: new Date().toISOString(),
   });
 });
@@ -129,7 +129,7 @@ app.use((err, _req, res, _next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`✅ Bit-HireMatrix API running on port ${PORT}`);
+  console.log(`Bit-HireMatrix API running on port ${PORT}`);
 });
 
 module.exports = app;
