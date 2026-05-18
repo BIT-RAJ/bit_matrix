@@ -826,7 +826,7 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
-if (require.main === module) {
+if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`✅ Bit-HireMatrix API running on http://localhost:${PORT}`);
   });
