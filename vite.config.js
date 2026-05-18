@@ -6,7 +6,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'http://localhost:3001',
+                target: 'https://resume-analyzer-api-4gpv.onrender.com',
                 changeOrigin: true,
             },
         },
